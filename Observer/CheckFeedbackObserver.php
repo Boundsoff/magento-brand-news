@@ -3,6 +3,7 @@
 namespace Boundsoff\BrandNews\Observer;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
+use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
 use Magento\Backend\Model\Auth\Session as BackendAuthSession;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ObserverInterface;
@@ -11,7 +12,9 @@ use Magento\Framework\Event\Observer;
 class CheckFeedbackObserver implements ObserverInterface
 {
     /**
-     * @param DataObject $dataObject Data for feedback items
+     * @param BackendAuthSession $backendAuthSession
+     * @param FeedbackServiceInterface $feedbackService
+     * @param DataObject $dataObject
      */
     public function __construct(
         protected readonly BackendAuthSession $backendAuthSession,
@@ -26,6 +29,7 @@ class CheckFeedbackObserver implements ObserverInterface
      * @param Observer $observer
      *
      * @return void
+     * @throws FeedbackServiceException
      */
     public function execute(Observer $observer)
     {

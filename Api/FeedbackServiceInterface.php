@@ -2,6 +2,8 @@
 
 namespace Boundsoff\BrandNews\Api;
 
+use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
+
 interface FeedbackServiceInterface
 {
     /**
@@ -11,6 +13,7 @@ interface FeedbackServiceInterface
      * @param string $description
      * @param string $url
      * @return void
+     * @throws FeedbackServiceException
      */
-    public function add(string $title, string $description, string $url = ''): void;
+    public function add(string $title, string $description, string $url): void;
 }
