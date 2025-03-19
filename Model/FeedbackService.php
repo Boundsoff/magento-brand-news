@@ -6,6 +6,7 @@ use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\Framework\FlagManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class FeedbackService implements FeedbackServiceInterface
 {
@@ -14,17 +15,19 @@ class FeedbackService implements FeedbackServiceInterface
     /**
      * @param InboxFactory $inboxFactory
      * @param FlagManager $flagManager
+     * @param TimezoneInterface $timezone
      */
     public function __construct(
         protected readonly InboxFactory $inboxFactory,
         protected readonly FlagManager $flagManager,
+        protected readonly TimezoneInterface $timezone,
     ) {
     }
 
     /**
      * @inheritdoc
      */
-    public function add(string $title, string $description, string $url): void
+    public function add(string $title, string $description, string $url, string $timeout = ''): void
     {
         if (empty($title)) {
             throw FeedbackServiceException\Codes::EmptyTitle->getException();
@@ -50,16 +53,39 @@ class FeedbackService implements FeedbackServiceInterface
             ]);
         }
 
-        $hash = sha1("{$title}:{$description}:{$url}");
-        $flagData = $this->flagManager->getFlagData(static::ADDED_MESSAGES_HASH_FLAG_CODE) ?? [];
-        if (in_array($hash, $flagData)) {
-            return;
+        $timestamp = $this->getTimestamp(sha1("{$title}{$description}{$url}"));
+        if (!empty($timeout)) {
+            $scheduleAt = $this->timezone->date($timestamp)
+                ->modify($timeout);
+
+            $isInverted = !!$this->timezone->date()
+                ->diff($scheduleAt)
+                ->invert;
+
+            if ($isInverted) {
+                return;
+            }
         }
 
         $this->inboxFactory->create()
             ->addNotice($title, $description, $url);
+    }
 
-        $flagData[] = $hash;
-        $this->flagManager->saveFlag(static::ADDED_MESSAGES_HASH_FLAG_CODE, $flagData);
+    /**
+     * Getting timestamp for given hash from flag messages
+     *
+     * @param string $hash
+     * @return int
+     */
+    protected function getTimestamp(string $hash): int
+    {
+        $flagData = $this->flagManager->getFlagData(static::ADDED_MESSAGES_HASH_FLAG_CODE) ?? [];
+        if (!isset($flagData[$hash])) {
+            $flagData[$hash] = $this->timezone->date()
+                ->getTimestamp();
+            $this->flagManager->saveFlag(static::ADDED_MESSAGES_HASH_FLAG_CODE, $flagData);
+        }
+
+        return $flagData[$hash];
     }
 }

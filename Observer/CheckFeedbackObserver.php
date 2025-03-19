@@ -4,6 +4,7 @@ namespace Boundsoff\BrandNews\Observer;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
+use DateMalformedStringException;
 use Magento\Backend\Model\Auth\Session as BackendAuthSession;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ObserverInterface;
@@ -30,6 +31,7 @@ class CheckFeedbackObserver implements ObserverInterface
      *
      * @return void
      * @throws FeedbackServiceException
+     * @throws DateMalformedStringException
      */
     public function execute(Observer $observer)
     {
@@ -41,8 +43,9 @@ class CheckFeedbackObserver implements ObserverInterface
             $title = $item->getData('title');
             $description = $item->getData('description');
             $url = $item->getData('url');
+            $timeout = $item->getData('timeout');
 
-            $this->feedbackService->add($title, $description, $url);
+            $this->feedbackService->add($title, $description, $url, $timeout);
         }
     }
 
