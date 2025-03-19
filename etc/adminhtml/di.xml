@@ -11,12 +11,15 @@
     <virtualType name="BoundsoffBrandNewsFeedbackData" type="\Magento\Framework\DataObject">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="sandbox" xsi:type="array">
-                    <item name="title" xsi:type="string" translatable="true">Sandbox</item>
+                <item name="newsletter" xsi:type="array">
+                    <item name="title" xsi:type="string" translatable="true">Stay up to date with Boundsoff</item>
                     <item name="description" xsi:type="string" translatable="true">
-                        Hello World!
+                        Get real-time admin panel notifications on Boundsoff development progress,
+                        including new module updates, tech tips, performance enhancements,
+                        and essential fixes to keep your store running smoothly.
                     </item>
-                    <item name="url" xsi:type="string">https://google.com/</item>
+                    <item name="url" xsi:type="string">https://boundsoff.com/#newsletter</item>
+                    <item name="timeout" xsi:type="string">+3 days</item>
                 </item>
             </argument>
         </arguments>

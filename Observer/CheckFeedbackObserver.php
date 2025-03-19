@@ -3,6 +3,7 @@
 namespace Boundsoff\BrandNews\Observer;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
+use Boundsoff\BrandNews\Model\ConfigEnableOptions;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
 use DateMalformedStringException;
 use Magento\Backend\Model\Auth\Session as BackendAuthSession;
@@ -35,6 +36,10 @@ class CheckFeedbackObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        if (!$this->feedbackService->isEnabled(ConfigEnableOptions::NotificationsEnabled)) {
+            return;
+        }
+
         if (!$this->backendAuthSession->isLoggedIn()) {
             return;
         }

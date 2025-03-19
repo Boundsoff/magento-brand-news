@@ -5,23 +5,37 @@ namespace Boundsoff\BrandNews\Model;
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
 use Magento\AdminNotification\Model\InboxFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class FeedbackService implements FeedbackServiceInterface
 {
-    protected const ADDED_MESSAGES_HASH_FLAG_CODE = 'added_messages_hash';
+    protected const ADDED_MESSAGES_HASH_FLAG_CODE = 'bf__added_messages_hash';
 
     /**
      * @param InboxFactory $inboxFactory
      * @param FlagManager $flagManager
      * @param TimezoneInterface $timezone
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         protected readonly InboxFactory $inboxFactory,
         protected readonly FlagManager $flagManager,
         protected readonly TimezoneInterface $timezone,
+        protected readonly ScopeConfigInterface $scopeConfig,
     ) {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isEnabled(
+        ConfigEnableOptions $option,
+        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeCode = null,
+    ): bool {
+        return $this->scopeConfig->getValue($option->value);
     }
 
     /**
