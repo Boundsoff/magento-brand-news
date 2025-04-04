@@ -6,6 +6,9 @@
             <notifications>
                 <enabled>1</enabled>
             </notifications>
+            <blog_feed>
+                <enabled>1</enabled>
+            </blog_feed>
         </bf_brand_news>
     </default>
 </config>

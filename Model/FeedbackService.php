@@ -4,8 +4,14 @@ namespace Boundsoff\BrandNews\Model;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
+use Boundsoff\BrandNews\Model\Exception\BlogFeedConsumerException;
+use DateTime;
+use Laminas\Feed\Reader\Reader;
+use Laminas\Http\Client;
+use Laminas\Http\ClientProxy;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
@@ -18,12 +24,14 @@ class FeedbackService implements FeedbackServiceInterface
      * @param FlagManager $flagManager
      * @param TimezoneInterface $timezone
      * @param ScopeConfigInterface $scopeConfig
+     * @param DataObject $dataConfig
      */
     public function __construct(
-        protected readonly InboxFactory $inboxFactory,
-        protected readonly FlagManager $flagManager,
-        protected readonly TimezoneInterface $timezone,
+        protected readonly InboxFactory         $inboxFactory,
+        protected readonly FlagManager          $flagManager,
+        protected readonly TimezoneInterface    $timezone,
         protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly DataObject           $dataConfig,
     ) {
     }
 
@@ -41,7 +49,7 @@ class FeedbackService implements FeedbackServiceInterface
     /**
      * @inheritdoc
      */
-    public function add(string $title, string $description, string $url, string $timeout = ''): void
+    public function addAdminNotification(string $title, string $description, string $url, string $timeout = ''): void
     {
         if (empty($title)) {
             throw FeedbackServiceException\Codes::EmptyTitle->getException();
@@ -59,12 +67,8 @@ class FeedbackService implements FeedbackServiceInterface
             throw FeedbackServiceException\Codes::InvalidUrl->getException();
         }
 
-        // phpcs:ignore
-        $headers = get_headers($url);
-        if (!$headers || !str_contains($headers[0], '200')) {
-            throw FeedbackServiceException\Codes::ResponseCodeInvalid->getException([
-                'status_code' => $headers[0],
-            ]);
+        if (!$this->isUriAvailable($url)) {
+            throw FeedbackServiceException\Codes::ResponseCodeInvalid->getException();
         }
 
         $timestamp = $this->getTimestamp(sha1("{$title}{$description}{$url}"));
@@ -86,6 +90,28 @@ class FeedbackService implements FeedbackServiceInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function readBlogFeed(?DateTime $fromDate = null): array
+    {
+        if (empty($fromDate)) {
+            $fromDate = $this->timezone->date('-1 month');
+        }
+        $blogUrl = $this->dataConfig->getData('blog_url');
+        $blogUrl .= '?' . http_build_query(['fromTimestamp' => $fromDate->getTimestamp()]);
+
+        if (!$this->isUriAvailable($blogUrl)) {
+            throw BlogFeedConsumerException\Codes::FeedUrlNotFound->getException();
+        }
+
+        $feeds = [];
+        foreach (Reader::import($blogUrl) as $feed) {
+            $feeds[] = $feed;
+        }
+        return $feeds;
+    }
+
+    /**
      * Getting timestamp for given hash from flag messages
      *
      * @param string $hash
@@ -101,5 +127,19 @@ class FeedbackService implements FeedbackServiceInterface
         }
 
         return $flagData[$hash];
+    }
+
+    /**
+     * Checking if given external service is responding
+     *
+     * @param string $uri
+     * @return bool
+     */
+    protected function isUriAvailable(string $uri): bool
+    {
+        return (new Client())
+            ->setUri($uri)
+            ->getResponse()
+            ->isOk();
     }
 }
