@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="Boundsoff_BrandNews::styles/marketplace.css"/>
+        <css src="Boundsoff_BrandNews::css/marketplace.css"/>
     </head>
     <body>
         <referenceContainer name="content">

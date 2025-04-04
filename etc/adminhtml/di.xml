@@ -3,6 +3,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="\Boundsoff\BrandNews\Api\FeedbackServiceInterface"
                 type="\Boundsoff\BrandNews\Model\FeedbackService"/>
+    <preference for="\Boundsoff\BrandNews\Api\MenuNotificationServiceInterface"
+                type="\Boundsoff\BrandNews\Model\MenuNotificationService"/>
     <type name="\Boundsoff\BrandNews\Observer\CheckFeedbackObserver">
         <arguments>
             <argument name="dataObject" xsi:type="object">BoundsoffBrandNewsFeedbackData</argument>
