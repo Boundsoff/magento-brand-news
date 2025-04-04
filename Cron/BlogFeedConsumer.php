@@ -4,7 +4,6 @@ namespace Boundsoff\BrandNews\Cron;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
 use Boundsoff\BrandNews\Model\ConfigEnableOptions;
-use Boundsoff\BrandNews\Model\Exception\BlogFeedConsumerException;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Psr\Log\LoggerInterface;

@@ -9,6 +9,10 @@
             <blog_feed>
                 <enabled>1</enabled>
             </blog_feed>
+            <marketplace>
+                <enabled>1</enabled>
+                <updates>1</updates>
+            </marketplace>
         </bf_brand_news>
     </default>
 </config>

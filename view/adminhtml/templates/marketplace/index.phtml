@@ -1,0 +1,36 @@
+<?php
+/** @var \Boundsoff\BrandNews\Block\Adminhtml\Marketplace $block */
+$modules = $block->getFeedbackService()->getModulesUpdated();
+?>
+
+<section class="brand-marketplace">
+    <hr class="page-separator" />
+    <div class="row row-gutter">
+        <div class="col-m-5">
+            <img
+                    class="magento-marketplace-logo"
+                    src="<?= $block->escapeUrl($block
+                        ->getViewFileUrl('Boundsoff_BrandNews::marketplace/images/logo-black.svg')); ?>"
+                    alt="Partner"/>
+            <div class="content">
+                <h2 class="page-sub-title">Boundsoff</h2>
+                <p class="partner-description">
+                    <?= $block->escapeHtml(__(
+                        'Extensions and Themes are an essential component of the Magento Ecosystem. ' .
+                        'Please visit the Magento Marketplace to see the latest innovations that developers have ' .
+                        'created to enhance your Magento Store.'
+                    )); ?>
+                </p>
+                <ul>
+                    <?php foreach ($modules as $module): ?>
+                        <li><?= $module['version'] ?> (<?= $module['name'] ?>)</li>
+                    <?php endforeach; ?>
+                </ul>
+                <a class="action-secondary" target="_blank"
+                   href="https://boundsoff.com/marketplace/magento">
+                    <?= $block->escapeHtml(__('Marketplace')) ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

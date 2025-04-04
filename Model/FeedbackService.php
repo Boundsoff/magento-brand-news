@@ -5,6 +5,7 @@ namespace Boundsoff\BrandNews\Model;
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
 use Boundsoff\BrandNews\Model\Exception\BlogFeedConsumerException;
+use Composer\InstalledVersions;
 use DateTime;
 use Laminas\Feed\Reader\Reader;
 use Laminas\Http\Client;
@@ -14,8 +15,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-class FeedbackService implements FeedbackServiceInterface
+class FeedbackService implements FeedbackServiceInterface, ArgumentInterface
 {
     protected const ADDED_MESSAGES_HASH_FLAG_CODE = 'bf__added_messages_hash';
 
@@ -98,7 +100,7 @@ class FeedbackService implements FeedbackServiceInterface
             $fromDate = $this->timezone->date('-1 month');
         }
         $blogUrl = $this->dataConfig->getData('blog_url');
-        $blogUrl .= '?' . http_build_query(['fromTimestamp' => $fromDate->getTimestamp()]);
+        $blogUrl .= '?' . http_build_query(['fromTimestamp' => $fromDate->format('Y-m-d')]);
 
         if (!$this->isUriAvailable($blogUrl)) {
             throw BlogFeedConsumerException\Codes::FeedUrlNotFound->getException();
@@ -109,6 +111,21 @@ class FeedbackService implements FeedbackServiceInterface
             $feeds[] = $feed;
         }
         return $feeds;
+    }
+
+    public function getModulesUpdated(): array
+    {
+        if (!$this->isEnabled(ConfigEnableOptions::MarketplaceUpdates)) {
+            return [];
+        }
+
+        $packages = InstalledVersions::getInstalledPackages();
+        $packages = array_filter($packages, fn($package) => str_contains($package, 'boundsoff/'));
+
+        return array_map(fn ($package) => [
+            'name' => $package,
+            'version' => InstalledVersions::getPrettyVersion($package),
+        ], $packages);
     }
 
     /**

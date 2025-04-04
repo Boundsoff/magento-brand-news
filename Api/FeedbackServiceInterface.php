@@ -46,4 +46,11 @@ interface FeedbackServiceInterface
      * @throws BlogFeedConsumerException
      */
     public function readBlogFeed(?DateTime $fromDate = null): array;
+
+    /**
+     * List of modules and their version with information about update
+     *
+     * @return array
+     */
+    public function getModulesUpdated(): array;
 }
