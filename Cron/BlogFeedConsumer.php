@@ -32,23 +32,5 @@ class BlogFeedConsumer
         if (!$this->feedbackService->isEnabled(ConfigEnableOptions::BlogFeed)) {
             return;
         }
-
-        // phpcs:ignore
-        $headers = get_headers(static::FEED_URL);
-        if (!$headers || !str_contains($headers[0], '200')) {
-            throw BlogFeedConsumerException\Codes::FeedUrlNotFound->getException([
-                'status_code' => $headers[0],
-            ]);
-        }
-
-        // @todo filter out from last sync date
-        $feeds = Reader::import(static::FEED_URL);
-        foreach ($feeds as $feed) {
-            $title = $feed->getTitle();
-            $description = $feed->getDescription();
-            $link = $feed->getLink();
-
-            $this->feedbackService->add($title, $description, $link);
-        }
     }
 }

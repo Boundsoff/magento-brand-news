@@ -50,7 +50,7 @@ class CheckFeedbackObserver implements ObserverInterface
             $url = $item->getData('url');
             $timeout = $item->getData('timeout');
 
-            $this->feedbackService->add($title, $description, $url, $timeout);
+            $this->feedbackService->addAdminNotification($title, $description, $url, $timeout);
         }
     }
 

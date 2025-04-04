@@ -33,5 +33,5 @@ interface FeedbackServiceInterface
      * @throws FeedbackServiceException
      * @throws DateMalformedStringException
      */
-    public function add(string $title, string $description, string $url): void;
+    public function addAdminNotification(string $title, string $description, string $url): void;
 }
