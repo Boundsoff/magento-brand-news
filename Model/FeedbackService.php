@@ -24,6 +24,7 @@ class FeedbackService implements FeedbackServiceInterface
      * @param FlagManager $flagManager
      * @param TimezoneInterface $timezone
      * @param ScopeConfigInterface $scopeConfig
+     * @param DataObject $dataConfig
      */
     public function __construct(
         protected readonly InboxFactory         $inboxFactory,
@@ -88,6 +89,9 @@ class FeedbackService implements FeedbackServiceInterface
             ->addNotice($title, $description, $url);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function readBlogFeed(?DateTime $fromDate = null): array
     {
         if (empty($fromDate)) {
@@ -125,6 +129,12 @@ class FeedbackService implements FeedbackServiceInterface
         return $flagData[$hash];
     }
 
+    /**
+     * Checking if given external service is responding
+     *
+     * @param string $uri
+     * @return bool
+     */
     protected function isUriAvailable(string $uri): bool
     {
         return (new Client())
