@@ -53,4 +53,13 @@ interface FeedbackServiceInterface
      * @return array
      */
     public function getModulesUpdated(): array;
+
+
+    /**
+     * Checking if given external service is responding
+     *
+     * @param string $uri
+     * @return bool
+     */
+    public function isUriAvailable(string $uri): bool;
 }

@@ -4,12 +4,10 @@ namespace Boundsoff\BrandNews\Test\Unit;
 
 use Boundsoff\BrandNews\Model\FeedbackService;
 use DateTime;
-use Laminas\Feed\Reader\Http\Response as FeedResponse;
 use Laminas\Feed\Reader\Reader;
 use Laminas\Feed\Writer\Feed;
 use Laminas\Http\Client as HttpClient;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
@@ -137,11 +135,6 @@ class FeedbackServiceTest extends TestCase
         $flagManager = $this->createMock(FlagManager::class);
         $timezone = $this->createMock(TimezoneInterface::class);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $dataConfig = $this->createMock(DataObject::class);
-
-        $dataConfig->expects($this->once())
-            ->method('getData')
-            ->willReturn('http://127.0.0.1/');
 
         $timezone->expects($this->once())
             ->method('date')
@@ -153,7 +146,6 @@ class FeedbackServiceTest extends TestCase
             $flagManager,
             $timezone,
             $scopeConfig,
-            $dataConfig,
         );
 
         $actual = $feedbackService->readBlogFeed();

@@ -1,6 +1,7 @@
 <?php
 /** @var \Boundsoff\BrandNews\Block\Adminhtml\Marketplace $block */
 $modules = $block->getFeedbackService()->getModulesUpdated();
+$marketplaceUri = $block->getMarketplaceUri();
 ?>
 
 <section class="brand-marketplace">
@@ -26,10 +27,12 @@ $modules = $block->getFeedbackService()->getModulesUpdated();
                         <li><?= $module['version'] ?> (<?= $module['name'] ?>)</li>
                     <?php endforeach; ?>
                 </ul>
-                <a class="action-secondary" target="_blank"
-                   href="https://boundsoff.com/marketplace/magento">
-                    <?= $block->escapeHtml(__('Marketplace')) ?>
-                </a>
+                <?php if ($block->getFeedbackService()->isUriAvailable($marketplaceUri)): ?>
+                    <a class="action-secondary" target="_blank"
+                       href="<?= $block->escapeHtml($marketplaceUri) ?>">
+                        <?= $block->escapeHtml(__('Marketplace')) ?>
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>

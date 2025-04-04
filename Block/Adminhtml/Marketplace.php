@@ -8,6 +8,7 @@ use Magento\Backend\Block\Template;
 
 /**
  * @method FeedbackServiceInterface getFeedbackService()
+ * @method string getMarketplaceUri()
  */
 class Marketplace extends Template
 {

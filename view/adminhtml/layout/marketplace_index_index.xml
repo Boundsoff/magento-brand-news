@@ -12,6 +12,9 @@
                     <argument name="feedback_service" xsi:type="object">
                         \Boundsoff\BrandNews\Api\FeedbackServiceInterface
                     </argument>
+                    <argument name="marketplace_uri" xsi:type="string">
+                        https://boundsoff.com/marketplace/magento
+                    </argument>
                 </arguments>
             </block>
         </referenceContainer>
