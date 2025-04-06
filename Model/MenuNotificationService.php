@@ -37,7 +37,12 @@ class MenuNotificationService implements MenuNotificationServiceInterface, Argum
                 continue;
             }
 
-            if (!is_numeric($count)) {
+            if (!is_array($count)) {
+                continue;
+            }
+
+            $count = array_filter($count, fn($item) => !empty($item));
+            if (empty($count)) {
                 continue;
             }
 

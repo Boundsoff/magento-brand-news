@@ -10,7 +10,7 @@ define([
             this._super();
 
             this.notifications.forEach(({ id, count }) => {
-                const menu = document.getElementById('menu-magento-marketplace-partners');
+                const menu = document.querySelector(`#${id} > a`);
                 if (menu) {
                     menu.dataset.notifications = count > 9 ? '9+' : count;
                 }
