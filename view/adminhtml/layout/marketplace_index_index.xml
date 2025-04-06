@@ -9,8 +9,8 @@
             <block class="Boundsoff\BrandNews\Block\Adminhtml\Marketplace" name="boundsoff_index"
                    template="Boundsoff_BrandNews::marketplace/index.phtml">
                 <arguments>
-                    <argument name="feedback_service" xsi:type="object">
-                        Boundsoff\BrandNews\Api\FeedbackServiceInterface
+                    <argument name="module_info_service" xsi:type="object">
+                        Boundsoff\BrandNews\Api\ModuleInfoServiceInterface
                     </argument>
                     <argument name="data_helper" xsi:type="object">
                         Boundsoff\BrandNews\Helper\Data
