@@ -3,7 +3,10 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
         <job name="bf__blog_feed_consumer" instance="\Boundsoff\BrandNews\Cron\BlogFeedConsumer" method="execute">
-            <schedule>* * * * *</schedule>
+            <schedule>* * */1 * *</schedule>
+        </job>
+        <job name="bf__module_check_for_update" instance="\Boundsoff\BrandNews\Cron\ModuleVersionCheckForUpdate" method="execute">
+            <schedule>* * */1 * *</schedule>
         </job>
     </group>
 </config>

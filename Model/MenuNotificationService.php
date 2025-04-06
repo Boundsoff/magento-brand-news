@@ -50,7 +50,7 @@ class MenuNotificationService implements MenuNotificationServiceInterface, Argum
     /**
      * @ingeritdoc
      */
-    public function adjustCounter(string $menuId, int $count): void
+    public function adjustCounter(string $menuId, string $hash, bool $increase): void
     {
         if (empty($this->menuConfig->getMenu()->get($menuId))) {
             throw MenuNotificationException\Codes::MenuItemDoesNotExists->getException([
@@ -66,10 +66,10 @@ class MenuNotificationService implements MenuNotificationServiceInterface, Argum
 
         $notifications = $this->getCounter();
         $notifications = array_column($notifications, 'count', 'id');
-        $notifications[$menuId] = $notifications[$menuId] ?? 0;
-        $notifications[$menuId] += $count;
-        if ($notifications[$menuId] <= 0) {
-            unset($notifications[$menuId]);
+        if ($increase) {
+            $notifications[$menuId][$hash] = 1;
+        } else {
+            unset($notifications[$menuId][$hash]);
         }
 
         $this->flagManager->saveFlag(static::MENU_NOTIFICATIONS_FLAG_CODE, $notifications);

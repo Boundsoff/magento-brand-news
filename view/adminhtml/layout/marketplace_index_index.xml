@@ -10,7 +10,10 @@
                    template="Boundsoff_BrandNews::marketplace/index.phtml">
                 <arguments>
                     <argument name="feedback_service" xsi:type="object">
-                        \Boundsoff\BrandNews\Api\FeedbackServiceInterface
+                        Boundsoff\BrandNews\Api\FeedbackServiceInterface
+                    </argument>
+                    <argument name="data_helper" xsi:type="object">
+                        Boundsoff\BrandNews\Helper\Data
                     </argument>
                     <argument name="marketplace_uri" xsi:type="string">
                         https://boundsoff.com/marketplace/magento

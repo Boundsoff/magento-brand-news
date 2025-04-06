@@ -2,6 +2,7 @@
 
 namespace Boundsoff\BrandNews\Test\Unit;
 
+use Boundsoff\BrandNews\Helper\Data as Helper;
 use Boundsoff\BrandNews\Model\FeedbackService;
 use DateTime;
 use Laminas\Feed\Reader\Reader;
@@ -135,17 +136,23 @@ class FeedbackServiceTest extends TestCase
         $flagManager = $this->createMock(FlagManager::class);
         $timezone = $this->createMock(TimezoneInterface::class);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $helper = $this->createMock(Helper::class);
 
         $timezone->expects($this->once())
             ->method('date')
             ->with('-1 month')
             ->willReturn(new DateTime('-1 month'));
 
+        $helper->expects($this->once())
+            ->method('isUriAvailable')
+            ->willReturn(true);
+
         $feedbackService = new FeedbackService(
             $inboxFactory,
             $flagManager,
             $timezone,
             $scopeConfig,
+            $helper,
         );
 
         $actual = $feedbackService->readBlogFeed();

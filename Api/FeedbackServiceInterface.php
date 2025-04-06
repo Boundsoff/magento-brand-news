@@ -13,20 +13,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 interface FeedbackServiceInterface
 {
     /**
-     * Check if given chanel is enabled
-     *
-     * @param ConfigEnableOptions $option
-     * @param string $scopeType
-     * @param int|string|null $scopeCode
-     * @return bool
-     */
-    public function isEnabled(
-        ConfigEnableOptions $option,
-        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-        $scopeCode = null,
-    ): bool;
-
-    /**
      * Add new feed information to the notifications
      *
      * @param string $title
@@ -46,20 +32,4 @@ interface FeedbackServiceInterface
      * @throws BlogFeedConsumerException
      */
     public function readBlogFeed(?DateTime $fromDate = null): array;
-
-    /**
-     * List of modules and their version with information about update
-     *
-     * @return array
-     */
-    public function getModulesUpdated(): array;
-
-
-    /**
-     * Checking if given external service is responding
-     *
-     * @param string $uri
-     * @return bool
-     */
-    public function isUriAvailable(string $uri): bool;
 }

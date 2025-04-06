@@ -1,6 +1,6 @@
 <?php
 /** @var \Boundsoff\BrandNews\Block\Adminhtml\Marketplace $block */
-$modules = $block->getFeedbackService()->getModulesUpdated();
+$modules = $block->getFeedbackService()->getBrandModules();
 $marketplaceUri = $block->getMarketplaceUri();
 ?>
 
@@ -27,7 +27,7 @@ $marketplaceUri = $block->getMarketplaceUri();
                         <li><?= $module['version'] ?> (<?= $module['name'] ?>)</li>
                     <?php endforeach; ?>
                 </ul>
-                <?php if ($block->getFeedbackService()->isUriAvailable($marketplaceUri)): ?>
+                <?php if ($block->getDataHelper()->isUriAvailable($marketplaceUri)): ?>
                     <a class="action-secondary" target="_blank"
                        href="<?= $block->escapeHtml($marketplaceUri) ?>">
                         <?= $block->escapeHtml(__('Marketplace')) ?>

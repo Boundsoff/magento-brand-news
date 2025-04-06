@@ -1,7 +1,6 @@
 <?php /** @var \Magento\Framework\View\Element\Template $block */
 /** @var \Boundsoff\BrandNews\Api\MenuNotificationServiceInterface $menuNotificationService */
 $menuNotificationService = $block->getData('menu_notification_service');
-$menuNotificationService->adjustCounter('Magento_Marketplace::partners', -1);
 $counter = $menuNotificationService->getCounter();
 array_walk($counter, function (&$item) use ($block) {
     $item['id'] = $block->getJsId($item['id']);
@@ -10,7 +9,7 @@ array_walk($counter, function (&$item) use ($block) {
 $mageInit = [
     '.admin__menu' => [
             "Boundsoff_BrandNews/js/menu-counter" => [
-                    'notifications' => $counter,
+                    'notifications' => count($counter),
             ]
     ]
 ];

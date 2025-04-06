@@ -3,18 +3,20 @@
 namespace Boundsoff\BrandNews\Block\Adminhtml;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
+use Boundsoff\BrandNews\Helper\Data as Helper;
 use Boundsoff\BrandNews\Model\ConfigEnableOptions;
 use Magento\Backend\Block\Template;
 
 /**
  * @method FeedbackServiceInterface getFeedbackService()
  * @method string getMarketplaceUri()
+ * @method Helper getDataHelper()
  */
 class Marketplace extends Template
 {
     protected function _toHtml()
     {
-        if (!$this->getFeedbackService()->isEnabled(ConfigEnableOptions::MarketplaceEnabled)) {
+        if (!$this->getDataHelper()->isEnabled(ConfigEnableOptions::MarketplaceEnabled)) {
             return '';
         }
 

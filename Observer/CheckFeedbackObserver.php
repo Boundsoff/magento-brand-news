@@ -3,6 +3,7 @@
 namespace Boundsoff\BrandNews\Observer;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
+use Boundsoff\BrandNews\Helper\Data as Helper;
 use Boundsoff\BrandNews\Model\ConfigEnableOptions;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
 use DateMalformedStringException;
@@ -16,12 +17,14 @@ class CheckFeedbackObserver implements ObserverInterface
     /**
      * @param BackendAuthSession $backendAuthSession
      * @param FeedbackServiceInterface $feedbackService
+     * @param Helper $helper
      * @param DataObject $dataObject
      */
     public function __construct(
-        protected readonly BackendAuthSession $backendAuthSession,
+        protected readonly BackendAuthSession       $backendAuthSession,
         protected readonly FeedbackServiceInterface $feedbackService,
-        protected readonly DataObject         $dataObject,
+        protected readonly Helper                   $helper,
+        protected readonly DataObject               $dataObject,
     ) {
     }
 
@@ -36,7 +39,7 @@ class CheckFeedbackObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if (!$this->feedbackService->isEnabled(ConfigEnableOptions::NotificationsEnabled)) {
+        if (!$this->helper->isEnabled(ConfigEnableOptions::NotificationsEnabled)) {
             return;
         }
 

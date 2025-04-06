@@ -19,10 +19,11 @@ interface MenuNotificationServiceInterface
      * Adjust the notification count for given menu
      *
      * @param string $menuId ex. $notifications[$menuId]
-     * @param int $count
+     * @param string $hash usually use `sha1` function to generate hash of type message
+     * @param bool $increase when true it will add the number hash otherwise will delete it
      * @return void
      * @throws BlogFeedConsumerException
      * @throws MenuNotificationException
      */
-    public function adjustCounter(string $menuId, int $count): void;
+    public function adjustCounter(string $menuId, string $hash, bool $increase): void;
 }

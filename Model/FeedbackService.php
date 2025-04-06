@@ -3,6 +3,7 @@
 namespace Boundsoff\BrandNews\Model;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
+use Boundsoff\BrandNews\Helper\Data as Helper;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
 use Boundsoff\BrandNews\Model\Exception\BlogFeedConsumerException;
 use Composer\InstalledVersions;
@@ -31,18 +32,8 @@ class FeedbackService implements FeedbackServiceInterface, ArgumentInterface
         protected readonly FlagManager          $flagManager,
         protected readonly TimezoneInterface    $timezone,
         protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly Helper               $helper,
     ) {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isEnabled(
-        ConfigEnableOptions $option,
-        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-        $scopeCode = null,
-    ): bool {
-        return $this->scopeConfig->getValue($option->value);
     }
 
     /**
@@ -66,7 +57,7 @@ class FeedbackService implements FeedbackServiceInterface, ArgumentInterface
             throw FeedbackServiceException\Codes::InvalidUrl->getException();
         }
 
-        if (!$this->isUriAvailable($url)) {
+        if (!$this->helper->isUriAvailable($url)) {
             throw FeedbackServiceException\Codes::ResponseCodeInvalid->getException();
         }
 
@@ -99,7 +90,7 @@ class FeedbackService implements FeedbackServiceInterface, ArgumentInterface
         $blogUrl = self::BLOG_URL_RSS_FEED;
         $blogUrl .= '?' . http_build_query(['fromTimestamp' => $fromDate->format('Y-m-d')]);
 
-        if (!$this->isUriAvailable($blogUrl)) {
+        if (!$this->helper->isUriAvailable($blogUrl)) {
             throw BlogFeedConsumerException\Codes::FeedUrlNotFound->getException();
         }
 
@@ -108,24 +99,6 @@ class FeedbackService implements FeedbackServiceInterface, ArgumentInterface
             $feeds[] = $feed;
         }
         return $feeds;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getModulesUpdated(): array
-    {
-        if (!$this->isEnabled(ConfigEnableOptions::MarketplaceUpdates)) {
-            return [];
-        }
-
-        $packages = InstalledVersions::getInstalledPackages();
-        $packages = array_filter($packages, fn($package) => str_contains($package, 'boundsoff/'));
-
-        return array_map(fn ($package) => [
-            'name' => $package,
-            'version' => InstalledVersions::getPrettyVersion($package),
-        ], $packages);
     }
 
     /**
@@ -144,16 +117,5 @@ class FeedbackService implements FeedbackServiceInterface, ArgumentInterface
         }
 
         return $flagData[$hash];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isUriAvailable(string $uri): bool
-    {
-        return (new Client())
-            ->setUri($uri)
-            ->getResponse()
-            ->isOk();
     }
 }
