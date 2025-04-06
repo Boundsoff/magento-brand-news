@@ -2,14 +2,13 @@
 
 namespace Boundsoff\BrandNews\Test\Unit;
 
+use Boundsoff\BrandNews\Helper\Data as Helper;
 use Boundsoff\BrandNews\Model\FeedbackService;
 use DateTime;
-use Laminas\Feed\Reader\Http\Response as FeedResponse;
 use Laminas\Feed\Reader\Reader;
 use Laminas\Feed\Writer\Feed;
 use Laminas\Http\Client as HttpClient;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
@@ -137,23 +136,23 @@ class FeedbackServiceTest extends TestCase
         $flagManager = $this->createMock(FlagManager::class);
         $timezone = $this->createMock(TimezoneInterface::class);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $dataConfig = $this->createMock(DataObject::class);
-
-        $dataConfig->expects($this->once())
-            ->method('getData')
-            ->willReturn('http://127.0.0.1/');
+        $helper = $this->createMock(Helper::class);
 
         $timezone->expects($this->once())
             ->method('date')
             ->with('-1 month')
             ->willReturn(new DateTime('-1 month'));
 
+        $helper->expects($this->once())
+            ->method('isUriAvailable')
+            ->willReturn(true);
+
         $feedbackService = new FeedbackService(
             $inboxFactory,
             $flagManager,
             $timezone,
             $scopeConfig,
-            $dataConfig,
+            $helper,
         );
 
         $actual = $feedbackService->readBlogFeed();

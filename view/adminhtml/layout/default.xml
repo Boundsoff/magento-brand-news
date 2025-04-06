@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="page.menu">
+            <block name="menu.counter" template="Boundsoff_BrandNews::menu/counter.phtml">
+                <arguments>
+                    <argument name="menu_notification_service" xsi:type="object">
+                        \Boundsoff\BrandNews\Api\MenuNotificationServiceInterface
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="\Boundsoff\BrandNews\Api\FeedbackServiceInterface"
-                type="\Boundsoff\BrandNews\Model\FeedbackService"/>
-    <type name="\Boundsoff\BrandNews\Api\FeedbackServiceInterface">
-        <arguments>
-            <argument name="dataConfig" xsi:type="object">BoundsoffBrandNewsFeedbackData</argument>
-        </arguments>
-    </type>
     <type name="\Boundsoff\BrandNews\Observer\CheckFeedbackObserver">
         <arguments>
             <argument name="dataObject" xsi:type="object">BoundsoffBrandNewsFeedbackData</argument>
@@ -26,7 +19,6 @@
                     <item name="url" xsi:type="string">https://boundsoff.com/#newsletter</item>
                     <item name="timeout" xsi:type="string">+3 days</item>
                 </item>
-                <item name="blog_url" xsi:type="string">https://boundsoff.com/news/rss</item>
             </argument>
         </arguments>
     </virtualType>

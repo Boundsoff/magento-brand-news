@@ -3,47 +3,37 @@
 namespace Boundsoff\BrandNews\Model;
 
 use Boundsoff\BrandNews\Api\FeedbackServiceInterface;
+use Boundsoff\BrandNews\Helper\Data as Helper;
 use Boundsoff\BrandNews\Model\Exception\FeedbackServiceException;
 use Boundsoff\BrandNews\Model\Exception\BlogFeedConsumerException;
+use Composer\InstalledVersions;
 use DateTime;
 use Laminas\Feed\Reader\Reader;
 use Laminas\Http\Client;
-use Laminas\Http\ClientProxy;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-class FeedbackService implements FeedbackServiceInterface
+class FeedbackService implements FeedbackServiceInterface, ArgumentInterface
 {
-    protected const ADDED_MESSAGES_HASH_FLAG_CODE = 'bf__added_messages_hash';
+    private const ADDED_MESSAGES_HASH_FLAG_CODE = 'bf__added_messages_hash';
+    private const BLOG_URL_RSS_FEED = 'https://boundsoff.com/news/rss';
 
     /**
      * @param InboxFactory $inboxFactory
      * @param FlagManager $flagManager
      * @param TimezoneInterface $timezone
      * @param ScopeConfigInterface $scopeConfig
-     * @param DataObject $dataConfig
      */
     public function __construct(
         protected readonly InboxFactory         $inboxFactory,
         protected readonly FlagManager          $flagManager,
         protected readonly TimezoneInterface    $timezone,
         protected readonly ScopeConfigInterface $scopeConfig,
-        protected readonly DataObject           $dataConfig,
+        protected readonly Helper               $helper,
     ) {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function isEnabled(
-        ConfigEnableOptions $option,
-        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-        $scopeCode = null,
-    ): bool {
-        return $this->scopeConfig->getValue($option->value);
     }
 
     /**
@@ -67,7 +57,7 @@ class FeedbackService implements FeedbackServiceInterface
             throw FeedbackServiceException\Codes::InvalidUrl->getException();
         }
 
-        if (!$this->isUriAvailable($url)) {
+        if (!$this->helper->isUriAvailable($url)) {
             throw FeedbackServiceException\Codes::ResponseCodeInvalid->getException();
         }
 
@@ -97,10 +87,10 @@ class FeedbackService implements FeedbackServiceInterface
         if (empty($fromDate)) {
             $fromDate = $this->timezone->date('-1 month');
         }
-        $blogUrl = $this->dataConfig->getData('blog_url');
-        $blogUrl .= '?' . http_build_query(['fromTimestamp' => $fromDate->getTimestamp()]);
+        $blogUrl = self::BLOG_URL_RSS_FEED;
+        $blogUrl .= '?' . http_build_query(['fromTimestamp' => $fromDate->format('Y-m-d')]);
 
-        if (!$this->isUriAvailable($blogUrl)) {
+        if (!$this->helper->isUriAvailable($blogUrl)) {
             throw BlogFeedConsumerException\Codes::FeedUrlNotFound->getException();
         }
 
@@ -127,19 +117,5 @@ class FeedbackService implements FeedbackServiceInterface
         }
 
         return $flagData[$hash];
-    }
-
-    /**
-     * Checking if given external service is responding
-     *
-     * @param string $uri
-     * @return bool
-     */
-    protected function isUriAvailable(string $uri): bool
-    {
-        return (new Client())
-            ->setUri($uri)
-            ->getResponse()
-            ->isOk();
     }
 }
