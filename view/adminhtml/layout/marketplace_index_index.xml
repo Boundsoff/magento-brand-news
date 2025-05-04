@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Boundsoff_BrandNews::css/marketplace.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Boundsoff\BrandNews\Block\Adminhtml\Marketplace" name="boundsoff_index"
+                   template="Boundsoff_BrandNews::marketplace/index.phtml">
+                <arguments>
+                    <argument name="module_info_service" xsi:type="object">
+                        Boundsoff\BrandNews\Api\ModuleInfoServiceInterface
+                    </argument>
+                    <argument name="data_helper" xsi:type="object">
+                        Boundsoff\BrandNews\Helper\Data
+                    </argument>
+                    <argument name="marketplace_uri" xsi:type="string">
+                        https://boundsoff.com/marketplace/magento
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

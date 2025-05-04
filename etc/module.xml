@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Boundsoff_BrandNews">
         <sequence>
-            <module name="Magento_PageBuilder"/>
+            <module name="Magento_AdminNotification"/>
         </sequence>
     </module>
 </config>

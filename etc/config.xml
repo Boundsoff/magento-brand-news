@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <bf_brand_news>
+            <notifications>
+                <enabled>1</enabled>
+            </notifications>
+            <blog_feed>
+                <enabled>1</enabled>
+            </blog_feed>
+            <marketplace>
+                <enabled>1</enabled>
+                <updates>1</updates>
+            </marketplace>
+        </bf_brand_news>
+    </default>
+</config>

@@ -5,7 +5,8 @@
   "type": "magento2-module",
   "license": "MIT",
   "require": {
-
+    "magento/module-admin-notification": "^100.4.6",
+    "laminas/laminas-feed": "^2.23"
   },
   "autoload": {
     "files": [
