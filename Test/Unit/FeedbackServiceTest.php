@@ -6,16 +6,22 @@ use Boundsoff\BrandNews\Helper\Data as Helper;
 use Boundsoff\BrandNews\Model\FeedbackService;
 use DateTime;
 use Laminas\Feed\Reader\Reader;
+use Laminas\Feed\Writer\Entry;
 use Laminas\Feed\Writer\Feed;
 use Laminas\Http\Client as HttpClient;
+use Magento\AdminNotification\Model\InboxFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
-use Magento\AdminNotification\Model\InboxFactory;
 
 class FeedbackServiceTest extends TestCase
 {
+    /** @var array|Entry[] */
+    protected array $data;
+    /** @var Feed */
+    protected Feed $feed;
+
     protected function setUp(): void
     {
         $data = [
@@ -94,7 +100,7 @@ class FeedbackServiceTest extends TestCase
         ];
 
         $this->data = array_map(function ($item) {
-            $entry = new \Laminas\Feed\Writer\Entry();
+            $entry = new Entry();
             $entry->setType('rss');
 
             $entry->setTitle($item['title']);
@@ -124,7 +130,7 @@ class FeedbackServiceTest extends TestCase
         $httpClient = $this->createMock(HttpClient::class);
         Reader::setHttpClient($httpClient);
 
-        array_walk($this->data, fn($item) => $this->feed->addEntry($item));
+        array_walk($this->data, fn ($item) => $this->feed->addEntry($item));
         $response = new \Laminas\Http\Response();
         $response->setStatusCode(200)
             ->setContent($this->feed->export('rss'));
