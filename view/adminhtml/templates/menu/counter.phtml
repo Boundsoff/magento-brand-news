@@ -19,5 +19,5 @@ $mageInit = [
 ?>
 
 <script type="text/x-magento-init">
-<?= json_encode($mageInit); ?>
+<?= /* @noEscape */ json_encode($mageInit); ?>
 </script>

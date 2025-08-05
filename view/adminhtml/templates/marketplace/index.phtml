@@ -1,5 +1,6 @@
 <?php
 /** @var \Boundsoff\BrandNews\Block\Adminhtml\Marketplace $block */
+/** @var \Magento\Framework\Escaper $escaper */
 $modules = $block->getModuleInfoService()->getVersions();
 $marketplaceUri = $block->getMarketplaceUri();
 ?>
@@ -10,13 +11,13 @@ $marketplaceUri = $block->getMarketplaceUri();
         <div class="col-m-5">
             <img
                     class="magento-marketplace-logo"
-                    src="<?= $block->escapeUrl($block
+                    src="<?= $escaper->escapeUrl($block
                         ->getViewFileUrl('Boundsoff_BrandNews::marketplace/images/logo-black.svg')); ?>"
                     alt="Partner"/>
             <div class="content">
                 <h2 class="page-sub-title">Boundsoff</h2>
                 <p class="partner-description">
-                    <?= $block->escapeHtml(__(
+                    <?= $escaper->escapeHtml(__(
                         'Extensions and Themes are an essential component of the Magento Ecosystem. ' .
                         'Please visit the Magento Marketplace to see the latest innovations that developers have ' .
                         'created to enhance your Magento Store.'
@@ -24,13 +25,16 @@ $marketplaceUri = $block->getMarketplaceUri();
                 </p>
                 <ul>
                     <?php foreach ($modules as $module): ?>
-                        <li><?= $module['version'] ?> (<?= $module['name'] ?>)</li>
+                        <li>
+                            <?= $escaper->escapeHtml($module['version']) ?>
+                            (<?= $escaper->escapeHtml($module['name']) ?>)
+                        </li>
                     <?php endforeach; ?>
                 </ul>
                 <?php if ($block->getDataHelper()->isUriAvailable($marketplaceUri)): ?>
                     <a class="action-secondary" target="_blank"
-                       href="<?= $block->escapeHtml($marketplaceUri) ?>">
-                        <?= $block->escapeHtml(__('Marketplace')) ?>
+                       href="<?= $escaper->escapeHtml($marketplaceUri) ?>">
+                        <?= $escaper->escapeHtml(__('Marketplace')) ?>
                     </a>
                 <?php endif; ?>
             </div>

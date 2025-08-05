@@ -27,8 +27,8 @@ class Data implements ArgumentInterface
      */
     public function isEnabled(
         ConfigEnableOptions $option,
-                            $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                            $scopeCode = null,
+        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeCode = null,
     ): bool {
         return $this->scopeConfig->getValue($option->value, $scopeType, $scopeCode);
     }

@@ -14,6 +14,7 @@ class MenuNotificationService implements MenuNotificationServiceInterface, Argum
 
     /**
      * @param FlagManager $flagManager
+     * @param MenuConfig $menuConfig
      */
     public function __construct(
         protected readonly FlagManager $flagManager,
@@ -22,7 +23,7 @@ class MenuNotificationService implements MenuNotificationServiceInterface, Argum
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function getCounter(): array
     {
@@ -53,7 +54,7 @@ class MenuNotificationService implements MenuNotificationServiceInterface, Argum
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function adjustCounter(string $menuId, string $hash, bool $increase): void
     {
