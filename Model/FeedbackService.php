@@ -26,6 +26,7 @@ class FeedbackService implements FeedbackServiceInterface, ArgumentInterface
      * @param FlagManager $flagManager
      * @param TimezoneInterface $timezone
      * @param ScopeConfigInterface $scopeConfig
+     * @param Helper $helper
      */
     public function __construct(
         protected readonly InboxFactory         $inboxFactory,
