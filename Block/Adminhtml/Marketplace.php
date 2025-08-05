@@ -15,6 +15,9 @@ use Magento\Backend\Block\Template;
  */
 class Marketplace extends Template
 {
+    /**
+     * @inheritdoc
+     */
     protected function _toHtml()
     {
         if (!$this->getDataHelper()->isEnabled(ConfigEnableOptions::MarketplaceEnabled)) {

@@ -19,8 +19,14 @@ enum Codes: int
     public function getException(array $context = []): MenuNotificationException
     {
         return (match ($this) {
-            self::MenuItemDoesNotExists => new MenuNotificationException(__('Given menu item does not exists.'), code: $this->value),
-            self::MenuItemIsNotAtRootLevel => new MenuNotificationException(__('Menu item is not at root level.'), code: $this->value),
+            self::MenuItemDoesNotExists => new MenuNotificationException(
+                __('Given menu item does not exists.'),
+                code: $this->value,
+            ),
+            self::MenuItemIsNotAtRootLevel => new MenuNotificationException(
+                __('Menu item is not at root level.'),
+                code: $this->value,
+            ),
         })
             ->setContext($context);
     }

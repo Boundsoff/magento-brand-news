@@ -11,11 +11,9 @@ class Data implements ArgumentInterface
 {
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param Client $client
      */
     public function __construct(
         protected readonly ScopeConfigInterface $scopeConfig,
-        protected readonly Client $client = new Client(),
     ) {
     }
 
@@ -29,8 +27,8 @@ class Data implements ArgumentInterface
      */
     public function isEnabled(
         ConfigEnableOptions $option,
-                            $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                            $scopeCode = null,
+        $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeCode = null,
     ): bool {
         return $this->scopeConfig->getValue($option->value, $scopeType, $scopeCode);
     }
@@ -43,9 +41,9 @@ class Data implements ArgumentInterface
      */
     public function isUriAvailable(string $uri): bool
     {
-        return $this->client
+        return (new Client())
             ->setUri($uri)
-            ->getResponse()
+            ->send()
             ->isOk();
     }
 
@@ -57,8 +55,9 @@ class Data implements ArgumentInterface
      */
     public function getResponseBody(string $uri): ?string
     {
-        $response = $this->client->setUri($uri)
-            ->getResponse();
+        $response = (new Client())
+            ->setUri($uri)
+            ->send();
 
         if (!$response->isOk()) {
             return null;

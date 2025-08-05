@@ -11,7 +11,7 @@ interface MenuNotificationServiceInterface
     /**
      * Get the count for menu notifications
      *
-     * @return array{id: string, count: int}
+     * @return array{id: string, count: array<string, int>}
      */
     public function getCounter(): array;
 

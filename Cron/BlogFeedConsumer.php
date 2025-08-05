@@ -20,6 +20,7 @@ class BlogFeedConsumer
      * @param FlagManager $flagManager
      * @param TimezoneInterface $timezone
      * @param LoggerInterface $logger
+     * @param Helper $helper
      */
     public function __construct(
         protected readonly FeedbackServiceInterface $feedbackService,
